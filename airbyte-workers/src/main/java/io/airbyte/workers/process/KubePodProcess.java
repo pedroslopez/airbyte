@@ -377,6 +377,7 @@ public class KubePodProcess extends Process implements KubePod {
                         final String curlImage,
                         final Map<String, String> envMap,
                         final Map<Integer, Integer> internalToExternalPorts,
+                        final long kubeInformerResyncMillis,
                         final String... args)
       throws IOException, InterruptedException {
     this.fabricClient = fabricClient;
@@ -531,7 +532,7 @@ public class KubePodProcess extends Process implements KubePod {
         new PodOperationContext()
             .withName(pod.getMetadata().getName())
             .withNamespace(namespace),
-        30 * 1000L);
+        kubeInformerResyncMillis);
     podInformer.addEventHandler(new ExitCodeWatcher(
         pod.getMetadata().getName(),
         namespace,
